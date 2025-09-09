@@ -26,5 +26,33 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 # On évalue la précision du modèle avec le score R² qui est une métrique couramment utilisée pour évaluer les modèles de régression
 # Le score R² varie entre 0 et 1, où 1 indique une prédiction parfaite et 0 indique que le modèle ne fait pas mieux que la moyenne des valeurs cibles
-r2_score = r2_score(y_test, y_pred)
-print(f"Model accuracy: {r2_score:.2f}")
+# r2_score = r2_score(y_test, y_pred)
+# print(f"Model accuracy: {r2_score:.2f}")
+
+"""
+Maintenant on va faire en sorte de pouvoir rentrer des données et d'avoir une prédiction de prix en retour
+Pour ca il faut les mettres dans un dataframe avec pandas et les injecter dans le modèle pour avoir un output (notre prix)
+"""
+
+
+def inject_input():
+    while True:
+        # on crée deux variables pour y implémenter les données
+        m = input("Entrez la superficie en m² : ")
+        room = input("Entrez le nombre de pièces : ")
+        # On en crée un tableau type exel (DataFrame) avec pandas ou on y met les valeurs inputé
+        try:
+            input_apartment = pd.DataFrame({"room": [int(room)],
+                                            "m": [float(m)]
+                                            })
+            break
+        except ValueError:
+            print(
+                "Veuillez entrer des valeurs numériques valides pour la superficie et le nombre de pièces.")
+    predicted_price = model.predict(input_apartment)
+    # enfin on print le résultat indication suplémentaire : .2f pour arrondir à 2 chiffres après la virgule et [0] pour avoir la valeur et pas le tableau ([0] = premier élément du tableau soit le prix trouver)
+    print(
+        f"Le prix prédit pour un appartement de {m} m² avec {room} pièces est de {predicted_price[0]:.2f} euros.")
+
+
+inject_input()
